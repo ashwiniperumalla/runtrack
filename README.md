@@ -1,16 +1,56 @@
-# React + Vite
+# RunTrack – Smart Fitness & Physical Test Training Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+RunTrack is a smart fitness and physical-test training web application that tracks outdoor walking, jogging, and running workouts using GPS.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Walking, Jogging, and Running modes
+- Custom target distance
+- Voice alert intervals
+- English and Telugu voice support
+- GPS-based outdoor distance tracking
+- Speed, pace, time, and calorie calculation
+- Live route tracking with OpenStreetMap
+- Road-matched GPS routes using OSRM
+- Pause, resume, and voice stop
+- Automatic target completion
+- Workout summary and history
+- User registration and login
+- Password reset
+- Profile photo upload
+- MySQL workout and user storage
+- Azure AI Speech for Telugu voice
+- Responsive desktop and mobile UI
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+- React
+- Vite
+- JavaScript
+- CSS
+- React Leaflet
+- OpenStreetMap
 
-## Expanding the Oxlint configuration
+### Backend
+- Python
+- FastAPI
+- MySQL
+- bcrypt
+- Azure AI Speech
+- OSRM
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Project Structure
+
+```text
+runtrack/
+├── backend/
+│   └── main.py
+├── public/
+├── src/
+│   ├── App.jsx
+│   ├── App.css
+│   └── main.jsx
+├── .gitignore
+├── package.json
+└── README.md
