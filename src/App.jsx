@@ -3,6 +3,8 @@ import "./App.css";
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 const startIcon = L.divIcon({
   className: "start-marker",
   html: "<div>●</div>",
@@ -100,7 +102,7 @@ useEffect(() => {
   const loadWorkoutHistory = async () => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/workouts?user_id=${user.user_id}`
+        `${API_BASE_URL}/workouts?user_id=${user.user_id}`
       );
 
       if (!response.ok) {
@@ -146,7 +148,7 @@ useEffect(() => {
   const matchRouteToRoads = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/map-match",
+        "${API_BASE_URL}/map-match",
         {
           method: "POST",
           headers: {
@@ -230,7 +232,7 @@ if (voiceLanguage === "telugu") {
     }
    
     const response = await fetch(
-      `http://127.0.0.1:8000/test-telugu?message=${encodeURIComponent(teluguMessage)}`
+      `${API_BASE_URL}/test-telugu?message=${encodeURIComponent(teluguMessage)}`
     );
 
     if (!response.ok) {
@@ -550,7 +552,7 @@ setWorkoutHistory((prev) => [
 // Save completed workout to MySQL
 try {
  const response = await fetch(
-  `http://127.0.0.1:8000/workouts?user_id=${user?.user_id}&activity=${encodeURIComponent(activity)}&target_distance=${targetDistanceKm}&completed_distance=${newDistance}&duration_seconds=${secondsRef.current}&speed=${finalSpeed}&pace=${finalPace}&calories=${Math.round(newDistance * 60)}`,
+  `${API_BASE_URL}/workouts?user_id=${user?.user_id}&activity=${encodeURIComponent(activity)}&target_distance=${targetDistanceKm}&completed_distance=${newDistance}&duration_seconds=${secondsRef.current}&speed=${finalSpeed}&pace=${finalPace}&calories=${Math.round(newDistance * 60)}`,
   {
     method: "POST",
     headers: {
@@ -678,7 +680,7 @@ const handleRegister = async () => {
 
   try {
     const response = await fetch(
-  "http://127.0.0.1:8000/register",
+  "${API_BASE_URL}/register",
   {
     method: "POST",
     headers: {
@@ -720,7 +722,7 @@ const handleLogin = async () => {
 
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/login?email=${encodeURIComponent(loginEmail)}&password=${encodeURIComponent(loginPassword)}`,
+      `${API_BASE_URL}/login?email=${encodeURIComponent(loginEmail)}&password=${encodeURIComponent(loginPassword)}`,
       {
         method: "POST",
       }
@@ -753,7 +755,7 @@ const handleForgotPassword = async () => {
 
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/forgot-password?email=${encodeURIComponent(forgotEmail.trim())}`,
+      `${API_BASE_URL}/forgot-password?email=${encodeURIComponent(forgotEmail.trim())}`,
       {
         method: "POST",
       }
@@ -788,7 +790,7 @@ if (newPassword !== confirmNewPassword) {
 }
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/reset-password?email=${encodeURIComponent(forgotEmail.trim())}`,
+      `${API_BASE_URL}/reset-password?email=${encodeURIComponent(forgotEmail.trim())}`,
       {
         method: "POST",
         headers: {
@@ -1267,7 +1269,7 @@ const handleProfilePhotoChange = async (event) => {
 
   try {
     const response = await fetch(
-      `http://127.0.0.1:8000/upload-profile-photo?user_id=${user?.user_id}`,
+      `${API_BASE_URL}/upload-profile-photo?user_id=${user?.user_id}`,
       {
         method: "POST",
         body: formData,
@@ -1275,7 +1277,7 @@ const handleProfilePhotoChange = async (event) => {
     );
 
     const data = await response.json();
-    const photoPath = `http://127.0.0.1:8000${data.profile_photo}`;
+    const photoPath = `${API_BASE_URL}${data.profile_photo}`;
 
     if (!response.ok) {
       alert(data.detail || "Profile photo upload failed.");
