@@ -148,7 +148,7 @@ useEffect(() => {
   const matchRouteToRoads = async () => {
     try {
       const response = await fetch(
-        "${API_BASE_URL}/map-match",
+        `${API_BASE_URL}/map-match`,
         {
           method: "POST",
           headers: {
@@ -680,7 +680,7 @@ const handleRegister = async () => {
 
   try {
     const response = await fetch(
-  "${API_BASE_URL}/register",
+  `${API_BASE_URL}/register`,
   {
     method: "POST",
     headers: {
