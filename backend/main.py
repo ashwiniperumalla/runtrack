@@ -13,7 +13,7 @@ load_dotenv()
 
 app = FastAPI()
 
-PROFILE_UPLOAD_DIR = "profile_photos"
+PROFILE_UPLOAD_DIR = "/tmp/profile_photos"
 os.makedirs(PROFILE_UPLOAD_DIR, exist_ok=True)
 app.mount(
     "/profile_photos",
