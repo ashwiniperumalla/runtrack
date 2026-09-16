@@ -27,10 +27,11 @@ class RegisterRequest(BaseModel):
     password: str = Field(min_length=8, max_length=100)
 app.add_middleware(
     CORSMiddleware,
-   allow_origins=[
-    "http://localhost:5173",
-    "https://runtrack-vweu.onrender.com",
-],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://runtrack-vweu.onrender.com",
+        "https://runtrack-bay.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
