@@ -1290,7 +1290,7 @@ const handleProfilePhotoChange = async (event) => {
 
     const updatedUser = {
       ...user,
-      profile_photo: data.profile_photo,
+      profile_photo: photoPath,
     };
 
     setUser(updatedUser);

@@ -8,6 +8,7 @@ import bcrypt
 import azure.cognitiveservices.speech as speechsdk
 from pydantic import BaseModel, EmailStr, Field
 from fastapi.staticfiles import StaticFiles
+from azure.storage.blob import BlobServiceClient, ContentSettings
 
 load_dotenv()
 
@@ -84,6 +85,8 @@ MYSQL_HOST = os.getenv("MYSQL_HOST")
 MYSQL_USER = os.getenv("MYSQL_USER")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE")
+AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+AZURE_STORAGE_CONTAINER = "profile-photos"
 
 def get_db_connection():
     connection = mysql.connector.connect(
@@ -255,7 +258,6 @@ async def upload_profile_photo(
 
     file_extension = ".jpg" if file.content_type == "image/jpeg" else ".png"
     file_name = f"user_{user_id}{file_extension}"
-    file_path = os.path.join(PROFILE_UPLOAD_DIR, file_name)
 
     contents = await file.read()
 
@@ -265,15 +267,39 @@ async def upload_profile_photo(
             detail="Image size must be less than 5 MB"
         )
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(contents)
+    try:
+        blob_service_client = BlobServiceClient.from_connection_string(
+            AZURE_STORAGE_CONNECTION_STRING
+        )
+
+        blob_client = blob_service_client.get_blob_client(
+            container=AZURE_STORAGE_CONTAINER,
+            blob=file_name
+        )
+
+        blob_client.upload_blob(
+            contents,
+            overwrite=True,
+            content_settings=ContentSettings(
+                content_type=file.content_type
+            )
+        )
+
+        profile_photo_url = blob_client.url
+
+    except Exception as e:
+        print("Azure Blob upload error:", e)
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to upload profile photo to storage"
+        )
 
     connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute(
         "UPDATE users SET profile_photo = %s WHERE id = %s",
-        (file_path, user_id)
+        (profile_photo_url, user_id)
     )
 
     connection.commit()
@@ -281,9 +307,9 @@ async def upload_profile_photo(
     connection.close()
 
     return {
-    "message": "Profile photo uploaded successfully",
-    "profile_photo": f"/profile_photos/{file_name}"
-}
+        "message": "Profile photo uploaded successfully",
+        "profile_photo": profile_photo_url
+    }
 @app.post("/forgot-password")
 def forgot_password(email: str):
     connection = get_db_connection()
