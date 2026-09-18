@@ -206,6 +206,7 @@ useEffect(() => {
 
   return () => clearInterval(timer);
 }, [workoutStarted, isPaused]);
+
 const speak = async (message) => {
 
 // Telugu → Azure AI Speech
@@ -305,6 +306,9 @@ const listenForStart = () => {
 
   startTriggeredRef.current = false;
   setIsListening(true);
+  setTimeout(() => {
+  speak("Your workout is ready. Can I start the timer?");
+}, 300);
 
   recognition.onstart = () => {
     setIsListening(true);
@@ -324,14 +328,11 @@ const listenForStart = () => {
     alert("I heard: " + userSpeech);
 
     if (
-      userSpeech.includes("yes") ||
-      userSpeech.includes("start") ||
-      userSpeech.includes("okay") ||
-      userSpeech.includes("ok") ||
-      userSpeech.includes("begin") ||
-      userSpeech.includes("go") ||
-      userSpeech.includes("let's go") ||
-      userSpeech.includes("lets go")
+  userSpeech.includes("yes") ||
+  userSpeech.includes("yeah") ||
+  userSpeech.includes("yep") ||
+  userSpeech.includes("okay") ||
+  userSpeech.includes("ok")
     ) {
       startTriggeredRef.current = true;
 
@@ -1588,10 +1589,9 @@ return (
 
       <button
       className="start-workout-button"
-  onClick={async () => {
-    await speak("Your workout is ready. Can I start the timer?");
-listenForStart();
-  }}
+  onClick={() => {
+  listenForStart();
+}}
 >
   START WORKOUT
 </button>
