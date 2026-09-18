@@ -306,10 +306,7 @@ const listenForStart = () => {
 
   startTriggeredRef.current = false;
   setIsListening(true);
-  setTimeout(() => {
-  speak("Your workout is ready. Can I start the timer?");
-}, 300);
-
+  
   recognition.onstart = () => {
     setIsListening(true);
   };
