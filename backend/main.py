@@ -310,6 +310,58 @@ async def upload_profile_photo(
         "message": "Profile photo uploaded successfully",
         "profile_photo": profile_photo_url
     }
+@app.get("/profile-photo/{user_id}")
+def get_profile_photo(user_id: int):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute(
+        "SELECT profile_photo FROM users WHERE id = %s",
+        (user_id,)
+    )
+
+    user = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if not user or not user["profile_photo"]:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile photo not found"
+        )
+
+    try:
+        blob_service_client = BlobServiceClient.from_connection_string(
+            AZURE_STORAGE_CONNECTION_STRING
+        )
+
+        blob_url = user["profile_photo"]
+        file_name = blob_url.split("/")[-1]
+
+        blob_client = blob_service_client.get_blob_client(
+            container=AZURE_STORAGE_CONTAINER,
+            blob=file_name
+        )
+
+        blob_data = blob_client.download_blob().readall()
+
+        if file_name.lower().endswith(".png"):
+            media_type = "image/png"
+        else:
+            media_type = "image/jpeg"
+
+        return Response(
+            content=blob_data,
+            media_type=media_type
+        )
+
+    except Exception as e:
+        print("Profile photo fetch error:", e)
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to load profile photo"
+        )
 @app.post("/forgot-password")
 def forgot_password(email: str):
     connection = get_db_connection()

@@ -53,6 +53,13 @@ const [user, setUser] = useState(() => {
   return savedUser ? JSON.parse(savedUser) : null;
 });
 const [profilePhoto, setProfilePhoto] = useState("");
+useEffect(() => {
+  if (isLoggedIn && user?.user_id) {
+    setProfilePhoto(
+      `${API_BASE_URL}/profile-photo/${user.user_id}`
+    );
+  }
+}, [isLoggedIn, user]);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
