@@ -300,67 +300,91 @@ const listenForStart = () => {
   const recognition = new SpeechRecognition();
 
   recognition.lang = "en-US";
-  recognition.continuous = true;
+  recognition.continuous = false;
   recognition.interimResults = false;
 
- startTriggeredRef.current = false;
-setIsListening(true);
+  startTriggeredRef.current = false;
+  setIsListening(true);
 
-recognition.start();
+  recognition.onstart = () => {
+    setIsListening(true);
+  };
 
-recognition.onresult = (event) => {
-  if (startTriggeredRef.current) {
-    return;
-  }
+  recognition.onresult = (event) => {
+    if (startTriggeredRef.current) {
+      return;
+    }
+
     const userSpeech = Array.from(event.results)
-        .map(result => result[0].transcript)
-        .join(" ")
-        .toLowerCase();
+      .map((result) => result[0].transcript)
+      .join(" ")
+      .trim()
+      .toLowerCase();
 
-    
+    console.log("Voice recognized:", userSpeech);
 
     if (
-        userSpeech.includes("yes") ||
-        userSpeech.includes("start") ||
-        userSpeech.includes("okay") ||
-        userSpeech.includes("ok") ||
-        userSpeech.includes("begin") ||
-        userSpeech.includes("go") ||
-        userSpeech.includes("let's go")
+      userSpeech.includes("yes") ||
+      userSpeech.includes("start") ||
+      userSpeech.includes("okay") ||
+      userSpeech.includes("ok") ||
+      userSpeech.includes("begin") ||
+      userSpeech.includes("go") ||
+      userSpeech.includes("let's go") ||
+      userSpeech.includes("lets go")
     ) {
       startTriggeredRef.current = true;
-        recognition.stop();
-        setIsListening(false);
 
-       setSeconds(0);
-       secondsRef.current = 0;
-       setDistance(0);
-       distanceRef.current = 0;
-       setSpeed(0);
-       setPace(0);
-       setCalories(0);
-       setRouteCoordinates([]);
-       setIsPaused(false);
-       setWorkoutCompleted(false);
-       previousLocation.current = null;
-       targetReachedRef.current = false;
-       lastAlertDistanceRef.current = 0;
+      recognition.stop();
+      setIsListening(false);
 
-        setWorkoutStarted(true);
-        startGPSTracking();
+      setSeconds(0);
+      secondsRef.current = 0;
 
-        speak("Timer started. Have a great workout!");
+      setDistance(0);
+      distanceRef.current = 0;
+
+      setSpeed(0);
+      setPace(0);
+      setCalories(0);
+
+      setRouteCoordinates([]);
+      setIsPaused(false);
+      setWorkoutCompleted(false);
+
+      previousLocation.current = null;
+      targetReachedRef.current = false;
+      lastAlertDistanceRef.current = 0;
+
+      setWorkoutStarted(true);
+
+      startGPSTracking();
+
+      speak("Timer started. Have a great workout!");
     }
-};
+  };
 
-  recognition.onerror = () => {
+  recognition.onerror = (event) => {
+    console.log("Speech recognition error:", event.error);
+
     setIsListening(false);
-    speak("I could not hear you. Please try again.");
+
+    if (!startTriggeredRef.current) {
+      speak("I could not hear you. Please try again.");
+    }
   };
 
   recognition.onend = () => {
     setIsListening(false);
   };
+
+  // Start recognition AFTER all event handlers are ready
+  try {
+    recognition.start();
+  } catch (error) {
+    console.log("Speech recognition start error:", error);
+    setIsListening(false);
+  }
 };
 const startGPSTracking = () => {
   
