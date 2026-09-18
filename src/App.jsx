@@ -321,7 +321,7 @@ const listenForStart = () => {
       .trim()
       .toLowerCase();
 
-    console.log("Voice recognized:", userSpeech);
+    alert("I heard: " + userSpeech);
 
     if (
       userSpeech.includes("yes") ||
