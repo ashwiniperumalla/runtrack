@@ -300,9 +300,9 @@ const listenForStart = () => {
 
   const recognition = new SpeechRecognition();
 
-  recognition.lang = "en-US";
-  recognition.continuous = false;
-  recognition.interimResults = false;
+  recognition.lang = "en-IN";
+  recognition.interimResults = true;
+  
 
   startTriggeredRef.current = false;
   setIsListening(true);
