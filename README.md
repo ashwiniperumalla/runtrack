@@ -126,55 +126,7 @@ AZURE_STORAGE_CONNECTION_STRING=your_azure_storage_connection_string
 ```
 Do not commit `.env` files or secret credentials to GitHub.
 
-## Features
 
-- GPS-based distance tracking
-- Real-time speed and pace calculation
-- Workout timer with pause and resume
-- Custom target distance alerts
-- Voice-controlled workout start
-- English and Telugu voice support
-- Automatic workout completion at target distance
-- Live route tracking
-- Calories estimation
-- Workout history
-- User registration and login
-- Password reset
-- Profile photo upload with Azure Blob Storage
-- MySQL database integration
-- Responsive design for desktop and mobile
-
-## Tech Stack
-
-### Frontend
-- React
-- Vite
-- JavaScript
-- HTML5
-- CSS3
-
-### Backend
-- Python
-- FastAPI
-- Uvicorn
-
-### Database
-- MySQL
-- Azure Database for MySQL
-
-### Cloud & Storage
-- Microsoft Azure Speech Services
-- Azure Blob Storage
-
-### APIs & Services
-- Browser Geolocation API
-- Web Speech API
-- OSRM Map Matching API
-
-### Development Tools
-- Visual Studio Code
-- Git
-- GitHub
 
 ## Deployment
 
