@@ -165,12 +165,7 @@ def get_workouts(user_id: int):
     connection.close()
 
     return workouts
-@app.get("/test-db")
-def test_db():
-    connection = get_db_connection()
-    connection.close()
 
-    return {"message": "MySQL connection successful"}
 @app.post("/register")
 def register_user(data: RegisterRequest):
     connection = get_db_connection()
