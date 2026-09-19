@@ -349,7 +349,7 @@ const listenForStart = () => {
       .trim()
       .toLowerCase();
 
-    alert("I heard: " + userSpeech);
+    
 
     if (
   userSpeech.includes("yes") ||
@@ -1594,15 +1594,20 @@ return (
 }}
 >
   START WORKOUT
-</button>
-{isListening && (
-  <p>🎤 Listening... Say "Yes" to start.</p>
-)}
-<button
-  className="manual-start-button"
-  onClick={startWorkoutNow}
->
-  ▶ START MANUALLY
+  </button>
+{isListening && ( 
+  <p>
+    🏃 Can I start the workout?
+    <br />
+    🎤 Say "Yes" or tap "START MANUALLY"
+  </p> 
+)} 
+
+<button 
+  className="manual-start-button" 
+  onClick={startWorkoutNow} 
+> 
+  ▶ START MANUALLY 
 </button>
 </div>
         {workoutStarted && (
