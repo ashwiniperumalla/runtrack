@@ -289,6 +289,33 @@ const audioUrl = URL.createObjectURL(audioBlob);
   window.speechSynthesis.speak(speech);
 });
 };
+const startWorkoutNow = () => {
+  startTriggeredRef.current = true;
+
+  setSeconds(0);
+  secondsRef.current = 0;
+
+  setDistance(0);
+  distanceRef.current = 0;
+
+  setSpeed(0);
+  setPace(0);
+  setCalories(0);
+
+  setRouteCoordinates([]);
+  setIsPaused(false);
+  setWorkoutCompleted(false);
+
+  previousLocation.current = null;
+  targetReachedRef.current = false;
+  lastAlertDistanceRef.current = 0;
+
+  setWorkoutStarted(true);
+
+  startGPSTracking();
+
+  speak("Timer started. Have a great workout!");
+};
 const listenForStart = () => {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -331,35 +358,11 @@ const listenForStart = () => {
   userSpeech.includes("okay") ||
   userSpeech.includes("ok")
     ) {
-      startTriggeredRef.current = true;
+  recognition.stop();
+  setIsListening(false);
 
-      recognition.stop();
-      setIsListening(false);
-
-      setSeconds(0);
-      secondsRef.current = 0;
-
-      setDistance(0);
-      distanceRef.current = 0;
-
-      setSpeed(0);
-      setPace(0);
-      setCalories(0);
-
-      setRouteCoordinates([]);
-      setIsPaused(false);
-      setWorkoutCompleted(false);
-
-      previousLocation.current = null;
-      targetReachedRef.current = false;
-      lastAlertDistanceRef.current = 0;
-
-      setWorkoutStarted(true);
-
-      startGPSTracking();
-
-      speak("Timer started. Have a great workout!");
-    }
+  startWorkoutNow();
+}
   };
 
   recognition.onerror = (event) => {
@@ -1595,6 +1598,12 @@ return (
 {isListening && (
   <p>🎤 Listening... Say "Yes" to start.</p>
 )}
+<button
+  className="manual-start-button"
+  onClick={startWorkoutNow}
+>
+  ▶ START MANUALLY
+</button>
 </div>
         {workoutStarted && (
   <div className="active-workout">
