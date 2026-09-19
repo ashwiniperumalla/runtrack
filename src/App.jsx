@@ -333,7 +333,9 @@ const listenForStart = () => {
 
   startTriggeredRef.current = false;
   setIsListening(true);
-  
+  setTimeout(() => {
+  speak("Can I start the workout?");
+}, 300);
   recognition.onstart = () => {
     setIsListening(true);
   };
@@ -1595,13 +1597,9 @@ return (
 >
   START WORKOUT
   </button>
-{isListening && ( 
-  <p>
-    🏃 Can I start the workout?
-    <br />
-    🎤 Say "Yes" or tap "START MANUALLY"
-  </p> 
-)} 
+{isListening && (
+  <p>🎤 Listening...</p>
+)}
 
 <button 
   className="manual-start-button" 
