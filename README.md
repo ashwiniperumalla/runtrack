@@ -9,7 +9,7 @@ RunTrack is a full-stack fitness and physical-test training web application desi
 It uses GPS to track outdoor distance and provides real-time workout metrics such as time, speed, pace, calories, and route information. Users can set target distances and voice-alert intervals, use English or Telugu voice support, pause/resume workouts, and view saved workout history.
 
 The application also includes user authentication, password reset, profile photo upload, and persistent workout data storage.
-RunTrack is a smart fitness and physical-test training web application that tracks outdoor walking, jogging, and running workouts using GPS.
+
 
 ## Features
 
