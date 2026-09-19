@@ -1239,3 +1239,22 @@ body {
     font-size: 16px;
   }
 }
+
+.manual-start-button {
+  display: block;
+  margin: 12px auto;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #d81b60;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.manual-start-button:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
