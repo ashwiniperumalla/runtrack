@@ -190,26 +190,18 @@ Profile photos are stored using Azure Blob Storage.
 
 ## Project Highlights
 
-- Built a full-stack fitness tracking application using React and FastAPI.
-- Implemented GPS-based outdoor workout tracking with live route visualization.
-- Added real-time distance, speed, pace, timer, and calorie calculations.
-- Implemented voice-controlled workout start with English and Telugu voice support.
-- Added automatic workout completion based on the selected target distance.
-- Integrated Azure Database for MySQL for persistent application data.
+- Built a full-stack fitness and physical-test training platform using React, FastAPI, and MySQL.
+- Implemented GPS-based outdoor workout tracking with live route visualization using React Leaflet and OpenStreetMap.
+- Added real-time distance, speed, pace, workout timer, and calorie tracking.
+- Implemented custom target distances and configurable voice-alert intervals.
+- Added English and Telugu voice support for workout interactions and alerts.
+- Implemented automatic workout completion when the selected target distance is reached.
+- Built user authentication with registration, login, and password reset functionality.
+- Implemented persistent workout history using Azure Database for MySQL.
 - Integrated Azure Blob Storage for profile photo storage.
-- Deployed the frontend on Vercel and backend on Render.
-- Designed the application to work across desktop and mobile devices.
-- GPS-based workout tracking with live route visualization
-- Real-time distance, speed, pace, time, and calorie tracking
-- Voice-controlled workout start with English and Telugu support
-- Custom target-distance and voice-alert intervals
-- Automatic workout completion when the target distance is reached
-- User authentication with registration, login, and password reset
-- Persistent workout history using Azure Database for MySQL
-- Profile photo storage using Azure Blob Storage
-- Responsive interface for desktop and mobile devices
-- Full-stack deployment using Vercel, Render, and Microsoft Azure
-
+- Added responsive UI support for desktop and mobile devices.
+- Integrated OSRM for road-matched GPS route visualization.
+- Deployed the frontend using Vercel and the backend using Render.  
 ## Author
 
 **Ashwini Perumalla**
