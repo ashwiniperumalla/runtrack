@@ -35,10 +35,12 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => { 
   return localStorage.getItem("runtrackLoggedIn") === "true";
 });
+const [isRegistering, setIsRegistering] = useState(false);
 const [showWelcome, setShowWelcome] = useState(true);
 const [logoutMessage, setLogoutMessage] = useState("");
 const [resetMessage, setResetMessage] = useState("");
 const [resetError, setResetError] = useState("");
+
 useEffect(() => {
   if (!logoutMessage) return;
 
@@ -697,6 +699,7 @@ speak("Workout stopped. Here is your workout summary.");
   };
 };
 const handleRegister = async () => {
+  
   if (!registerName.trim() || !registerEmail.trim() || !registerPassword || !confirmPassword) {
     alert("Please fill in all fields.");
     return;
@@ -711,7 +714,8 @@ const handleRegister = async () => {
     setResetError("Passwords do not match.");
     return;
   }
-
+if (isRegistering) return;
+setIsRegistering(true);
   try {
     const response = await fetch(
   `${API_BASE_URL}/register`,
@@ -749,7 +753,9 @@ const handleRegister = async () => {
   } catch (error) {
     console.error("Registration error:", error);
     alert("Unable to connect to the server.");
-  }
+  }finally {
+  setIsRegistering(false);
+}
 };
 const handleLogin = async () => {
   
@@ -1169,11 +1175,12 @@ if (!isLoggedIn) {
   </button>
 </div>
 
-        <button
+       <button
   className="login-action-button"
   onClick={handleRegister}
+  disabled={isRegistering}
 >
-  SIGN UP
+  {isRegistering ? "CREATING ACCOUNT..." : "SIGN UP"}
 </button>
 
         <br />
