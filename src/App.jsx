@@ -409,6 +409,13 @@ previousLocation.current = null;
 
  gpsWatchId.current = navigator.geolocation.watchPosition(
     async (position) => {
+      const accuracy = position.coords.accuracy;
+
+// Ignore inaccurate GPS readings
+if (!Number.isFinite(accuracy) || accuracy > 30) {
+  console.log("Ignoring inaccurate GPS reading:", accuracy);
+  return;
+}
   
 
  const latitude = position.coords.latitude;
@@ -468,12 +475,36 @@ const timeDiff =
 // Ignore unrealistic GPS jumps
 if (
   distanceMoved > 500 ||
-  (timeDiff > 0 && (distanceMoved / timeDiff) * 3.6 > 50)
+  timeDiff <= 0 ||
+  (distanceMoved / timeDiff) * 3.6 > 50
 ) {
   console.warn("Ignoring unrealistic GPS movement:", {
     distanceMoved,
     timeDiff,
   });
+  return;
+}
+
+// Filter small GPS fluctuations
+const minimumMovement = Math.max(
+  3,
+  Math.min(6, accuracy * 0.2)
+);
+
+if (distanceMoved < minimumMovement) {
+  // If there is no meaningful movement for 5 seconds,
+  // consider the user stationary.
+  if (timeDiff >= 5) {
+    setSpeed(0);
+    setPace(0);
+
+    previousLocation.current = {
+      latitude,
+      longitude,
+      timestamp: position.timestamp,
+    };
+  }
+
   return;
 }
 
@@ -488,15 +519,14 @@ setRouteCoordinates((prev) => [
   [latitude, longitude],
 ]);
 
-if (timeDiff > 0) {
-  const currentSpeed = (distanceMoved / timeDiff) * 3.6;
-  setSpeed(currentSpeed);
+const currentSpeed = (distanceMoved / timeDiff) * 3.6;
 
-  if (currentSpeed > 0) {
-    const currentPace = 60 / currentSpeed;
-    setPace(currentPace);
-  }
-}
+setSpeed(currentSpeed);
+
+const currentPace =
+  currentSpeed > 0 ? 60 / currentSpeed : 0;
+
+setPace(currentPace);
 
 const newDistance =
   distanceRef.current + distanceMoved / 1000;
@@ -553,6 +583,8 @@ if (
   );
 }
 // Check if target is reached
+console.log("GPS DISTANCE:", newDistance);
+console.log("TARGET DISTANCE:", targetDistanceKm);
 if (
   newDistance >= targetDistanceKm &&
   !targetReachedRef.current
@@ -624,9 +656,8 @@ setIsPaused(false);
   return targetDistanceKm;
 }
     },
-   (error) => {
-  
-
+  (error) => {
+  console.error("GPS tracking error:", error.code, error.message);
   setGpsError(error.message);
 },
     {
