@@ -470,6 +470,13 @@ const c =
   2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 const distanceMoved = R * c;
+console.log("GPS DEBUG:", {
+  accuracy,
+  distanceMoved,
+  timeDiff,
+  latitude,
+  longitude,
+});
 
 const timeDiff =
   (position.timestamp - previousLocation.current.timestamp) / 1000;
