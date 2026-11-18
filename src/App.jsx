@@ -478,7 +478,7 @@ const timeDiff =
 if (
   distanceMoved > 500 ||
   timeDiff <= 0 ||
-  (distanceMoved / timeDiff) * 3.6 > 50
+  (distanceMoved / timeDiff) * 3.6 > 25
 ) {
   console.warn("Ignoring unrealistic GPS movement:", {
     distanceMoved,
