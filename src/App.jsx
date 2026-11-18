@@ -192,6 +192,7 @@ useEffect(() => {
   const [gpsError, setGpsError] = useState("");
 
   const [customTarget, setCustomTarget] = useState("");
+  const [customTargetUnit, setCustomTargetUnit] = useState("km");
   const [customAlert, setCustomAlert] = useState("");
   useEffect(() => {
   if (!workoutStarted || isPaused) {
@@ -410,6 +411,7 @@ previousLocation.current = null;
  gpsWatchId.current = navigator.geolocation.watchPosition(
     async (position) => {
       const accuracy = position.coords.accuracy;
+      console.log("GPS accuracy received:", accuracy, "meters");
 
 // Ignore inaccurate GPS readings
 if (!Number.isFinite(accuracy) || accuracy > 30) {
@@ -545,18 +547,40 @@ previousLocation.current = {
 };
 
 
+
 // Convert selected target into kilometers
 let targetDistanceKm;
 
 if (target === "Custom") {
-    targetDistanceKm = Number(customTarget);
-} else if (target.includes("m")) {
-    targetDistanceKm = parseFloat(target) / 1000;
-} else {
-    targetDistanceKm = parseFloat(target);
-}
-console.log("TARGET:", target);
+  const value = Number(customTarget);
 
+  targetDistanceKm =
+    customTargetUnit === "m" ? value / 1000 : value;
+} else {
+  const normalizedTarget = String(target).trim().toLowerCase();
+
+  const match = normalizedTarget.match(
+    /^(\d+(?:\.\d+)?)\s*(km|m)$/
+  );
+
+  if (match) {
+    const value = Number(match[1]);
+    const unit = match[2];
+
+    targetDistanceKm = unit === "m" ? value / 1000 : value;
+  } else {
+    console.error("Invalid workout target:", target);
+    return;
+  }
+}
+
+if (!Number.isFinite(targetDistanceKm) || targetDistanceKm <= 0) {
+  alert("Please enter a valid target distance.");
+  return;
+}
+
+console.log("SELECTED TARGET:", target);
+console.log("TARGET DISTANCE IN KM:", targetDistanceKm);
 
 // Check voice alert interval
 let alertDistanceKm;
@@ -1555,13 +1579,18 @@ return (
             onChange={(e) => setCustomTarget(e.target.value)}
           />
 
-          <select>
-            <option>km</option>
-            <option>m</option>
-          </select>
+          <select
+  value={customTargetUnit}
+  onChange={(e) => setCustomTargetUnit(e.target.value)}
+>
+  <option value="km">km</option>
+  <option value="m">m</option>
+</select>
 
           <button
-            onClick={() => setTarget(`${customTarget} m`)}
+            onClick={() =>
+  setTarget(`${customTarget} ${customTargetUnit}`)
+}
           >
             Set Target
           </button>
